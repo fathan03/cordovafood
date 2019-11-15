@@ -451,7 +451,7 @@ document.addEventListener('init', function (event) {
                   <ons-list-item > ${arr} </ons-list-item>
           </ons-col>
           <ons-col>
-                  <ons-list-header style="text-align: right;color: black;">${arr1}</ons-list-header> 
+                  <ons-list-header style="text-align: right;color: black;margin-left: 120px">${arr1}</ons-list-header> 
           </ons-col>
         </ons-row>
         <br>
