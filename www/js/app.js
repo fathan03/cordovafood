@@ -286,7 +286,7 @@ document.addEventListener('init', function (event) {
     style="background: rgb(255, 255, 255); border: 1px solid white; color: black; flex: 0 0 33%; max-width: 30%;"
     width="10%">
         <ons-list-item>
-                <ons-icon  icon="fa-plus" onClick="add('${doc.data().name}')"  style="color: rgb(31, 30, 30);" ></ons-icon>
+                <ons-icon  icon="fa-plus" onClick="add('${doc.data().name}','${doc.data().price}')"  style="color: rgb(31, 30, 30);" ></ons-icon>
         </ons-list-item>
     </ons-col>
        `
@@ -297,7 +297,7 @@ document.addEventListener('init', function (event) {
 
 
   }
-    if (page.id === 'menuPage') {
+  if (page.id === 'menuPage') {
     console.log("menuPage");
 
     $("#login").click(function () {
@@ -429,18 +429,47 @@ document.addEventListener('init', function (event) {
 
     $("#cfbtn").click(function () {
       var content = document.getElementById('content');
-      var category = localStorage.getItem("selectedCategory");
-      console.log("categoryPage:" + category);
       content.load('cart1.html');
     });
   }
   if (page.id === 'cart1') {
     console.log("cart1");
 
+    var arr = [dataCartName];
+    var arr1 = [dataCartPrice];
+    console.log(arr);
+    console.log(arr1);
+    
+    for (i = 0; i < arr.length  ; i++) {
+      for (i = 0;  i < arr1.length ; i++) {
+        
+      var itemcart = `
+      <ons-list>
+      <br>
+      <ons-row>
+          <ons-col>
+                  <ons-list-item > ${arr} </ons-list-item>
+          </ons-col>
+          <ons-col>
+                  <ons-list-header style="text-align: right;color: black;">${arr1}</ons-list-header> 
+          </ons-col>
+        </ons-row>
+        <br>
+        </ons-list>
+             `
+          $("#cartdetail").append(itemcart);
+      }
+  
+  }
+
+
     $("#backbtn").click(function () {
       var content = document.getElementById('content');
       content.load('ListStarbuck.html');
     });
+
+
+
 
   }
   if (page.id === 'adrpage') {
@@ -495,50 +524,30 @@ document.addEventListener('init', function (event) {
   }
 
 });
-var dataCart = [];
-function add(name) {
-
+var dataCartName = [];
+var dataCartPrice = [];
+function add(name,price) {
   localStorage.setItem('additem', name);
-  var Data = localStorage.getItem("additem");
-  console.log(Data);
-  dataCart.push(Data);
-
+  localStorage.setItem('addprice', price);
+  var Name = localStorage.getItem("additem");
+  var Price = localStorage.getItem("addprice");
+   console.log(Name);
+   console.log(Price);
+  dataCartName.push(Name);
+  dataCartPrice.push(Price);
   ons.notification.toast('You have added a product ', {
-    timeout: 500
+    timeout: 1000
   });
   displayCart();
 }
 
+
+
 function displayCart() {
-  console.log("dataCart");
+  console.log(dataCartName);
+  console.log(dataCartPrice);
+ 
 
-    dataCart.forEach(function (dataCart) {
-    apr = db.collection("menu").where("name", "==", dataCart)
-      .get().then(function (listitem) {
-        listitem.forEach((doc) => {
-
-          var itemlist = `
-              <ons-list>
-                 
-               <div id="cartdetail"> 
-             <ons-row>
-                  <ons-col>
-                          <ons-list-item >${doc.data().name}</ons-list-item>
-                  </ons-col>
-                  <ons-col>
-                          <ons-list-header style="text-align: right;color: black; margin-top: 10px;">$${doc.data().price}</ons-list-header> 
-                  </ons-col>
-              </ons-row>
-      
-                              </div>                                    
-      
-          <ons-list><center>
-                         
-           `
-          $("cartdetail").append(itemlist);
-        });
-      });
-  })
 }
 
 

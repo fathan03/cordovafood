@@ -11,40 +11,23 @@ var firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-
-
 var db = firebase.firestore();
-
-
 // ดูสถานะการ login
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
-    // User is signed in.
-    //var displayName = user.displayName;
+
     var email = user.email;
     console.log(email + "signed in");
-    // var emailVerified = user.emailVerified;
-    // var photoURL = user.photoURL;
-    // var isAnonymous = user.isAnonymous;
-    // var uid = user.uid;
-    // var providerData = user.providerData;
-    // ...
+
   } else {
     console.log("sign out");
-    // User is signed out.
-    // ...
+
   }
 });
-
-
 document.addEventListener('init', function (event) {
   var page = event.target;
-
-
-
   if (page.id === 'homePage') {
     console.log("homePage");
-
     $("#menubtn").click(function () {
       $("#sidemenu")[0].open();
     });
@@ -52,7 +35,6 @@ document.addEventListener('init', function (event) {
     $("#carousel").empty();
     db.collection("recomended").get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-
         var item = `
         <ons-carousel-item modifier="nodivider" id="${doc.data().id}" class="recomended_item">
             <div class="thumbnail" style="background-image: url('${doc.data().photoUrl}')">
@@ -69,22 +51,16 @@ document.addEventListener('init', function (event) {
       $("#content")[0].load("shop1.html");
     });
   }
-
-
   if (page.id === 'shop1') {
     console.log("shop1");
-
     $("#shopss").empty();
     db.collection("Starbuck").get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-
         var item1 = `
         <ons-button id=${doc.data().idmenu} >
              <ons-list-item modifier="material" class="list-item list-item--material"
                  style="background-color: rgb(255, 255, 255);">
-                 
                  <div class="center list-item__center list-item--material__center">
-                         
                      <span class="list-item__title list-item--material__title" style="font-size: 15pt">${doc.data().name}</span>
                      <span class="list-item__subtitle list-item--material__subtitle">&nbsp;
                          <ons-icon icon="fa-star" size="15px" style="color: rgb(10, 10, 10);">${doc.data().distance}
@@ -106,7 +82,6 @@ document.addEventListener('init', function (event) {
     $("#shopss1").empty();
     db.collection("Yayoi").get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-
         var item11 = `
           <ons-button id=${doc.data().idmenu} >
                <ons-list-item modifier="material" class="list-item list-item--material"
@@ -124,12 +99,10 @@ document.addEventListener('init', function (event) {
                        <img class="list-item__thumbnail list-item--material__thumbnail"
                        style="background-image: url('${doc.data().url}')">
                    </div>
-               
                </ons-list-item>
            </ons-button>
          `
         $("#shopss1").append(item11);
-
       });
     });
     $("#shopss2").empty();
@@ -200,10 +173,8 @@ document.addEventListener('init', function (event) {
           <ons-button id=${doc.data().idmenu} >
                <ons-list-item modifier="material" class="list-item list-item--material"
                    style="background-color: rgb(255, 255, 255);">
-                   
                    <div class="center list-item__center list-item--material__center">
-                           
-                       <span class="list-item__title list-item--material__title" style="font-size: 15pt">${doc.data().name}</span>
+                   <span class="list-item__title list-item--material__title" style="font-size: 15pt">${doc.data().name}</span>
                        <span class="list-item__subtitle list-item--material__subtitle">&nbsp;
                            <ons-icon icon="fa-star" size="15px" style="color: rgb(10, 10, 10);">${doc.data().distance}
                            </ons-icon>
@@ -221,14 +192,9 @@ document.addEventListener('init', function (event) {
 
       });
     });
-
-
-
     $("#backhomebtn").click(function () {
       $("#content")[0].load("home.html");
     });
-
-
 
     $("#shopss").click(function () {
       localStorage.setItem("selectedCategory", "1");
@@ -252,7 +218,6 @@ document.addEventListener('init', function (event) {
       $("#content")[0].load("ListStarbuck.html");
     });
   }
-
 
   if (page.id === 'list') {
     console.log("list");
@@ -286,7 +251,6 @@ document.addEventListener('init', function (event) {
 
         });
       });
-
 
     $("#drink").empty();
     db.collection("menu").where("idmenu", "==", category).get()
@@ -322,7 +286,7 @@ document.addEventListener('init', function (event) {
     style="background: rgb(255, 255, 255); border: 1px solid white; color: black; flex: 0 0 33%; max-width: 30%;"
     width="10%">
         <ons-list-item>
-                <ons-icon  icon="fa-plus" onClick="add('${doc.data().name}')"  style="color: rgb(31, 30, 30);" ></ons-icon>
+                <ons-icon  icon="fa-plus" onClick="add('${doc.data().name}','${doc.data().price}')"  style="color: rgb(31, 30, 30);" ></ons-icon>
         </ons-list-item>
     </ons-col>
        `
@@ -333,54 +297,6 @@ document.addEventListener('init', function (event) {
 
 
   }
-
-
-
-  // $("#cartdetail").empty();
-
-  // localStorage.setItem('additem',name);
-  // var Data = localStorage.getItem("additem");
-
-
-  // db.collection("menu").where("name", "==", Data).get()
-  //   .then((querySnapshot) => {
-  //     querySnapshot.forEach((doc) => {
-  //       var itemmenu = `
-  //       <ons-list>
-
-  //        <div id="cartdetail"> 
-  //      <ons-row>
-  //           <ons-col>
-  //                   <ons-list-item >${doc.data().name}</ons-list-item>
-  //           </ons-col>
-  //           <ons-col>
-  //                   <ons-list-header style="text-align: right;color: black; margin-top: 10px;">$${doc.data().price}</ons-list-header> 
-  //           </ons-col>
-  //       </ons-row>
-
-  //                       </div>                                    
-
-  //   <ons-list><center>
-
-
-  //    `
-  //       $("#cartdetail").append(itemmenu);
-
-
-  //     });
-
-  //   });
-
-
-
-
-
-
-
-
-
-
-
   if (page.id === 'menuPage') {
     console.log("menuPage");
 
@@ -410,9 +326,6 @@ document.addEventListener('init', function (event) {
       $("#content")[0].load("address.html");
       $("#sidemenu")[0].close();
     });
-
-
-
   }
 
   if (page.id === 'loginPage') {
@@ -423,24 +336,18 @@ document.addEventListener('init', function (event) {
       var password = $("#password").val();
       firebase.auth().signInWithEmailAndPassword(email, password).then(function () {
         content.load('home.html');
-
       }
       )
-
         .catch(function (error) {
           ons.notification.alert('login filed')
           console.log(error.message);
         });
-
     });
-
 
     $("#signupbtn").click(function () {
       var content = document.getElementById('content');
       content.load('signup.html');
     });
-
-
     $("#backhomebtn").click(function () {
       $("#content")[0].load("home.html");
     });
@@ -468,23 +375,14 @@ document.addEventListener('init', function (event) {
         // ...
       });
     });
-
   }
 
   if (page.id === 'shop1') {
     console.log("shop1");
-
-
     $("#backbtn").click(function () {
       var content = document.getElementById('content');
       content.load('home.html');
-
-
-
-
-
     });
-
   }
   if (page.id === 'signup') {
     console.log("signup");
@@ -505,8 +403,6 @@ document.addEventListener('init', function (event) {
 
           if (errorCode === 'auth/weak-password') {
             ons.notification.alert('The password is too weak');
-
-
           } else {
 
             ons.notification.alert(errorMessage);
@@ -514,12 +410,7 @@ document.addEventListener('init', function (event) {
           }
           console.log(error);
 
-
         });
-
-
-
-
     });
 
     $("#backhomebtn").click(function () {
@@ -538,95 +429,114 @@ document.addEventListener('init', function (event) {
 
     $("#cfbtn").click(function () {
       var content = document.getElementById('content');
-      var category = localStorage.getItem("selectedCategory");
-      console.log("categoryPage:" + category);
       content.load('cart1.html');
     });
-
-
   }
-
-
   if (page.id === 'cart1') {
     console.log("cart1");
+
+    var arr = [dataCartName];
+    var arr1 = [dataCartPrice];
+    console.log(arr);
+    console.log(arr1);
+    
+    for (i = 0; i < arr.length  ; i++) {
+      for (i = 0;  i < arr1.length ; i++) {
+        
+      var itemcart = `
+      <ons-list>
+      <br>
+      <ons-row>
+          <ons-col>
+                  <ons-list-item > ${arr} </ons-list-item>
+          </ons-col>
+          <ons-col>
+                  <ons-list-header style="text-align: right;color: black;">${arr1}</ons-list-header> 
+          </ons-col>
+        </ons-row>
+        <br>
+        </ons-list>
+             `
+          $("#cartdetail").append(itemcart);
+      }
+  
+  }
+
 
     $("#backbtn").click(function () {
       var content = document.getElementById('content');
       content.load('ListStarbuck.html');
     });
 
+
+
+
   }
-
-
   if (page.id === 'adrpage') {
     console.log("adrpage");
-        
-    var lat , selectedLat;
-    var long , selectedLng;
-
-    var onSuccess = function(position) {
+    var lat, selectedLat;
+    var long, selectedLng;
+    var onSuccess = function (position) {
       lat = position.coords.latitude;
       long = position.coords.longitude;
 
       mapboxgl.accessToken = 'pk.eyJ1IjoiYmhhbnV0YWQiLCJhIjoiY2sybGF0YTR6MDU4MjNocTcyZTFpMWg5YSJ9.AGozFzoDT9EGKLmn_qkm-w';
       var map = new mapboxgl.Map({
-          container: 'map', //container id
-          style: 'mapbox://styles/mapbox/streets-v11',  //stylesheet location
-          center: [long, lat], //starting position
-          zoom: 14 //starting zoom
+        container: 'map', //container id
+        style: 'mapbox://styles/mapbox/streets-v11',  //stylesheet location
+        center: [long, lat], //starting position
+        zoom: 14 //starting zoom
 
       });
       var marker = new mapboxgl.Marker({
         draggable: true
-        })
+      })
         .setLngLat([long, lat])
         .addTo(map);
-         
-        function onDragEnd() {
+
+      function onDragEnd() {
         var lngLat = marker.getLngLat();
         selectedLat = lngLat.lat;
         selectedLng = lngLat.lng;
         coordinates.style.display = 'block';
         coordinates.innerHTML = 'Longitude: ' + lngLat.lng + '<br />Latitude: ' + lngLat.lat;
-        }
-         
-        marker.on('dragend', onDragEnd);
+      }
 
+      marker.on('dragend', onDragEnd);
 
-  };
+    };
 
-  function onError(error) {
-    alert('code: '    + error.code    + '\n' +
-          'message: ' + error.message + '\n');
-}
-navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    function onError(error) {
+      alert('code: ' + error.code + '\n' +
+        'message: ' + error.message + '\n');
+    }
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
 
-$("#setaddress").click(function () {
-  ons.notification.alert("Delivery:" + selectedLat + "," + selectedLng);     
-});
+    $("#setaddress").click(function () {
+      ons.notification.alert("Delivery:" + selectedLat + "," + selectedLng);
+    });
 
-$("#backbtn").click(function () {
-  var content = document.getElementById('content');
-  content.load('home.html');
-});
+    $("#backbtn").click(function () {
+      var content = document.getElementById('content');
+      content.load('home.html');
+    });
 
   }
 
 });
-
-
-
-
-var dataCart = [];
-function add(name) {
-
+var dataCartName = [];
+var dataCartPrice = [];
+function add(name,price) {
   localStorage.setItem('additem', name);
-  var Data = localStorage.getItem("additem");
-  console.log(Data);
-  dataCart.push(Data);
-
+  localStorage.setItem('addprice', price);
+  var Name = localStorage.getItem("additem");
+  var Price = localStorage.getItem("addprice");
+   console.log(Name);
+   console.log(Price);
+  dataCartName.push(Name);
+  dataCartPrice.push(Price);
   ons.notification.toast('You have added a product ', {
-    timeout: 500
+    timeout: 1000
   });
   displayCart();
 }
@@ -634,52 +544,9 @@ function add(name) {
 
 
 function displayCart() {
-
-  console.log(dataCart);
-
-  // db.collection("menu").where("name", "==", Data).get()
-  // //   .then((querySnapshot) => {
-  // //     querySnapshot.forEach((doc) => {
-  dataCart.forEach(function (dataCart) {
-    apr = db.collection("menu").where("name", "==", dataCart)
-      .get().then(function (listitem) {
-        listitem.forEach((doc) => {
-
-          var itemlist = `
-              <ons-list>
-                 
-               <div id="cartdetail"> 
-             <ons-row>
-                  <ons-col>
-                          <ons-list-item >${doc.data().name}</ons-list-item>
-                  </ons-col>
-                  <ons-col>
-                          <ons-list-header style="text-align: right;color: black; margin-top: 10px;">$${doc.data().price}</ons-list-header> 
-                  </ons-col>
-              </ons-row>
-      
-                              </div>                                    
-      
-          <ons-list><center>
-            
-             
-           `
-          $("cartdetail").append(itemlist);
-
-
-
-
-        });
-
-      });
-
-
-
-
-
-  })
-
-
+  console.log(dataCartName);
+  console.log(dataCartPrice);
+ 
 
 }
 
